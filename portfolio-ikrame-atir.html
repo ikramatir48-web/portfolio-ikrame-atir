@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ikrame Atir — Automatisation IA</title>
+<meta name="description" content="Ikrame Atir, ingénieure IA freelance. J'automatise vos processus répétitifs grâce au RAG, aux agents IA et à n8n — pour entreprises et particuliers, sans changer vos outils.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230c0c0e'/%3E%3Ctext x='50' y='62' font-family='Arial,sans-serif' font-size='42' font-weight='800' fill='%23c8b8ff' text-anchor='middle'%3EIA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --surface: #131316;
+  --surface2: #1c1c22;
+  --border: #27272f;
+  --border2: #35353f;
+  --accent: #c8b8ff;
+  --accent-dim: rgba(200,184,255,0.1);
+  --accent-line: rgba(200,184,255,0.25);
+  --text: #f5f4ff;
+  --text2: #cccadc;
+  --muted: #7a788f;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 4rem;background:rgba(12,12,14,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-size:0.82rem;color:var(--text2);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{font-size:0.82rem;color:var(--bg)!important;background:var(--accent);padding:0.55rem 1.3rem;border-radius:6px;text-decoration:none;transition:opacity 0.2s;font-weight:500;}
+.nav-cta:hover{opacity:0.85;}
+
+/* HERO */
+#hero{min-height:100vh;display:grid;grid-template-columns:1.6fr 1fr;gap:3rem;align-items:center;padding:10rem 4rem 6rem;position:relative;overflow:hidden;}
+.hero-bg-line{position:absolute;top:0;bottom:0;left:50%;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 20%,var(--border) 80%,transparent);opacity:0.3;}
+.hero-bg-line-2{position:absolute;top:0;bottom:0;left:25%;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 30%,var(--border) 70%,transparent);opacity:0.15;}
+.hero-bg-line-3{position:absolute;top:0;bottom:0;left:75%;width:1px;background:linear-gradient(to bottom,transparent,var(--border) 30%,var(--border) 70%,transparent);opacity:0.15;}
+
+.hero-left{position:relative;z-index:2;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:0.6rem;font-size:0.75rem;color:var(--text);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:1.5rem;opacity:0;animation:fadeUp 0.7s 0.1s ease forwards;background:var(--accent-dim);border:1px solid var(--accent-line);padding:0.5rem 1rem;border-radius:100px;font-weight:500;}
+.hero-dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 2.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.3;}}
+
+.hero-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.5rem,5vw,5.5rem);line-height:1.0;letter-spacing:-0.03em;margin-bottom:0.8rem;opacity:0;animation:fadeUp 0.7s 0.2s ease forwards;color:var(--text);}
+.hero-title-dim{color:var(--muted);display:block;}
+
+/* Animated typing line */
+.hero-typing-line{display:flex;align-items:center;gap:0.6rem;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(1.5rem,3vw,3rem);color:var(--accent);margin-bottom:1.8rem;opacity:0;animation:fadeUp 0.7s 0.3s ease forwards;}
+.hero-arrow{color:var(--text2);}
+.hero-typed{min-width:180px;}
+.hero-cursor{display:inline-block;width:3px;height:1em;background:var(--accent);margin-left:2px;animation:blink 0.8s infinite;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.hero-sub{font-size:1rem;color:var(--text2);max-width:480px;line-height:1.8;margin-bottom:2.5rem;opacity:0;animation:fadeUp 0.7s 0.4s ease forwards;}
+.hero-sub strong{color:var(--text);font-weight:500;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;opacity:0;animation:fadeUp 0.7s 0.5s ease forwards;}
+
+.btn-primary{display:inline-block;background:var(--accent);color:var(--bg);padding:0.85rem 2rem;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:0.9rem;text-decoration:none;transition:all 0.2s;}
+.btn-primary:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-ghost{display:inline-block;background:transparent;color:var(--text2);padding:0.85rem 2rem;border-radius:6px;border:1px solid var(--border2);font-size:0.9rem;text-decoration:none;transition:all 0.2s;}
+.btn-ghost:hover{border-color:var(--accent-line);color:var(--text);}
+
+/* Hero right — code card */
+.hero-right{position:relative;z-index:2;opacity:0;animation:fadeUp 0.7s 0.4s ease forwards;}
+.hero-photo-frame{width:100%;max-width:380px;aspect-ratio:3/4;border-radius:14px;background:var(--surface);border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-left:auto;}
+.hero-photo-frame img{width:100%;height:100%;object-fit:cover;display:block;border-radius:14px;}
+.hero-photo-placeholder{display:flex;flex-direction:column;align-items:center;gap:0.8rem;}
+.hero-photo-icon{width:64px;height:64px;border-radius:50%;background:var(--surface2);border:1px dashed var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:var(--muted);}
+.hero-photo-hint{font-size:0.8rem;color:var(--muted);}
+.hero-photo-caption{max-width:380px;margin-left:auto;margin-top:1rem;text-align:right;}
+.hero-photo-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:var(--text);letter-spacing:-0.01em;}
+.hero-photo-role{font-size:0.8rem;color:var(--text2);}
+
+/* NUMBERS */
+.numbers-strip{border-top:1px solid var(--border);border-bottom:1px solid var(--border);display:grid;grid-template-columns:repeat(4,1fr);background:var(--surface);}
+.number-item{padding:2.5rem 3rem;border-right:1px solid var(--border);transition:background 0.2s;}
+.number-item:last-child{border-right:none;}
+.number-item:hover{background:var(--surface2);}
+.number-val{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:2.4rem;color:var(--accent);letter-spacing:-0.03em;line-height:1;display:block;margin-bottom:0.4rem;}
+.number-label{font-size:0.78rem;color:var(--text2);line-height:1.5;}
+
+/* SECTIONS */
+.section{padding:7rem 4rem;max-width:1200px;margin:0 auto;}
+.section-full{padding:7rem 4rem;}
+.section-eyebrow{font-size:0.72rem;letter-spacing:0.15em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem;display:flex;align-items:center;gap:0.8rem;}
+.section-eyebrow::before{content:'';width:24px;height:1px;background:var(--muted);}
+.section-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:clamp(2rem,3.5vw,3rem);letter-spacing:-0.025em;line-height:1.1;margin-bottom:1rem;color:var(--text);}
+.section-desc{font-size:0.95rem;color:var(--text2);max-width:500px;line-height:1.8;margin-bottom:3.5rem;}
+
+/* PROJECT FILTERS */
+.proj-filters{display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:2rem;}
+.proj-filter{font-size:0.75rem;padding:0.4rem 1rem;border-radius:100px;border:1px solid var(--border2);color:var(--text2);background:transparent;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;letter-spacing:0.05em;}
+.proj-filter:hover{border-color:var(--accent-line);color:var(--text);}
+.proj-filter.active{background:var(--accent);color:var(--bg);border-color:var(--accent);font-weight:500;}
+
+/* PROJECTS */
+.projects-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.project-row{background:var(--surface);display:grid;grid-template-columns:1fr 2fr 1fr;transition:background 0.2s;}
+.project-row:hover{background:var(--surface2);}
+.project-row.hidden{display:none;}
+.proj-left{padding:2.5rem;border-right:1px solid var(--border);display:flex;flex-direction:column;justify-content:space-between;}
+.proj-mid{padding:2.5rem;border-right:1px solid var(--border);}
+.proj-right{padding:2.5rem;display:flex;flex-direction:column;justify-content:space-between;}
+.proj-index{font-family:'Bricolage Grotesque',sans-serif;font-size:0.7rem;color:var(--muted);letter-spacing:0.1em;margin-bottom:1.5rem;}
+.proj-client{font-size:0.72rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;}
+.proj-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:-0.02em;line-height:1.25;color:var(--text);}
+.proj-problem{font-size:0.82rem;color:var(--text2);font-style:italic;line-height:1.7;margin-bottom:1rem;padding-left:0.8rem;border-left:2px solid var(--border2);}
+.proj-desc{font-size:0.83rem;color:var(--text2);line-height:1.8;margin-bottom:1.5rem;}
+.proj-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.proj-tag{font-size:0.68rem;font-weight:500;padding:0.25rem 0.65rem;border-radius:4px;letter-spacing:0.02em;border:1px solid transparent;}
+.proj-result{font-family:'Bricolage Grotesque',sans-serif;font-size:1.7rem;font-weight:700;color:var(--accent);letter-spacing:-0.02em;line-height:1.1;margin-bottom:0.3rem;}
+.proj-result-label{font-size:0.75rem;color:var(--text2);line-height:1.5;}
+.proj-sector{display:inline-block;font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);background:var(--accent-dim);border:1px solid var(--accent-line);padding:0.3rem 0.7rem;border-radius:4px;}
+
+/* CAPTURES */
+#captures{border-top:1px solid var(--border);}
+.screenshots-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3.5rem;}
+.screenshot-card{position:relative;border-radius:10px;overflow:hidden;aspect-ratio:16/10;background:var(--surface2);border:1px solid var(--border2);cursor:pointer;transition:all 0.25s;}
+.screenshot-card:hover{border-color:var(--accent-line);transform:translateY(-3px);box-shadow:0 16px 40px rgba(0,0,0,0.5);}
+.screenshot-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform 0.3s;}
+.screenshot-card:hover img{transform:scale(1.03);}
+.sc-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.6rem;color:var(--muted);}
+.sc-placeholder-icon{font-size:1.8rem;opacity:0.4;}
+.sc-placeholder-name{font-family:'Bricolage Grotesque',sans-serif;font-size:0.82rem;font-weight:600;color:var(--text2);}
+.sc-placeholder-hint{font-size:0.7rem;color:var(--muted);}
+.sc-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(12,12,14,0.92) 0%,rgba(12,12,14,0.2) 60%,transparent 100%);opacity:0;transition:opacity 0.25s;display:flex;flex-direction:column;justify-content:flex-end;padding:1.2rem;}
+.screenshot-card:hover .sc-overlay{opacity:1;}
+.sc-overlay-title{font-family:'Bricolage Grotesque',sans-serif;font-size:0.88rem;font-weight:700;color:var(--text);margin-bottom:0.3rem;}
+.sc-overlay-btn{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.72rem;color:var(--accent);letter-spacing:0.05em;}
+.sc-overlay-btn::after{content:'→';}
+
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:background 0.3s,opacity 0.3s;}
+.lightbox.open{background:rgba(0,0,0,0.92);opacity:1;pointer-events:all;}
+.lightbox-inner{position:relative;max-width:90vw;max-height:90vh;transform:scale(0.92);transition:transform 0.3s;}
+.lightbox.open .lightbox-inner{transform:scale(1);}
+.lightbox-inner img{max-width:90vw;max-height:85vh;border-radius:8px;display:block;object-fit:contain;}
+.lightbox-caption{font-family:'Bricolage Grotesque',sans-serif;font-size:0.85rem;font-weight:600;color:var(--text2);text-align:center;margin-top:0.8rem;}
+.lightbox-close{position:fixed;top:1.5rem;right:1.5rem;width:40px;height:40px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1.1rem;transition:all 0.2s;z-index:1000;}
+.lightbox-close:hover{background:var(--border2);}
+.lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;background:var(--surface2);border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1rem;transition:all 0.2s;z-index:1000;}
+.lightbox-nav:hover{background:var(--border2);border-color:var(--accent-line);}
+.lightbox-prev{left:1.5rem;}
+.lightbox-next{right:1.5rem;}
+
+/* EXPERIENCE */
+#experience{border-top:1px solid var(--border);}
+.exp-list{display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.exp-row{background:var(--surface);display:grid;grid-template-columns:220px 1fr;transition:background 0.2s;}
+.exp-row:hover{background:var(--surface2);}
+.exp-left{padding:2rem;border-right:1px solid var(--border);}
+.exp-date{font-size:0.72rem;color:var(--accent);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:0.5rem;}
+.exp-company{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.95rem;color:var(--text);margin-bottom:0.3rem;}
+.exp-location{font-size:0.72rem;color:var(--muted);}
+.exp-right{padding:2rem;}
+.exp-role{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:0.6rem;}
+.exp-desc{font-size:0.82rem;color:var(--text2);line-height:1.8;margin-bottom:1rem;}
+.exp-tags{display:flex;flex-wrap:wrap;gap:0.4rem;}
+.exp-tag{font-size:0.68rem;color:var(--muted);border:1px solid var(--border2);padding:0.2rem 0.6rem;border-radius:4px;}
+
+/* STACK MARQUEE */
+.stack-marquee{overflow:hidden;position:relative;-webkit-mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(to right,transparent,#000 6%,#000 94%,transparent);}
+.stack-track{display:flex;gap:0.7rem;width:max-content;animation:stack-scroll 40s linear infinite;padding:0 4rem 4rem;}
+.stack-marquee:hover .stack-track{animation-play-state:paused;}
+.stack-pill{font-family:'Bricolage Grotesque',sans-serif;font-size:0.85rem;font-weight:600;padding:0.6rem 1.3rem;border-radius:100px;border:1px solid transparent;white-space:nowrap;letter-spacing:0.01em;}
+@keyframes stack-scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* PROCESS */
+#process{border-top:1px solid var(--border);background:var(--surface);}
+.process-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:3.5rem;}
+.process-step{background:var(--bg);padding:3rem 2.5rem;transition:background 0.2s;}
+.process-step:hover{background:var(--surface2);}
+.step-num{font-family:'Bricolage Grotesque',sans-serif;font-size:3.5rem;font-weight:800;color:var(--border2);line-height:1;margin-bottom:1.5rem;letter-spacing:-0.04em;}
+.step-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.1rem;margin-bottom:0.8rem;color:var(--text);}
+.step-desc{font-size:0.83rem;color:var(--text2);line-height:1.8;}
+
+/* ABOUT */
+#apropos{border-top:1px solid var(--border);}
+.about-grid{display:block;}
+.about-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.8rem;letter-spacing:-0.02em;margin-bottom:1.2rem;color:var(--text);max-width:700px;}
+.about-text{font-size:0.95rem;color:var(--text2);line-height:1.85;max-width:700px;}
+.about-text p+p{margin-top:1.2rem;}
+.about-text strong{color:var(--text);font-weight:500;}
+
+/* CONTACT */
+#contact{border-top:1px solid var(--border);background:var(--surface);}
+.contact-inner{max-width:1200px;margin:0 auto;padding:7rem 4rem;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.contact-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(2.2rem,4vw,3.8rem);letter-spacing:-0.03em;line-height:1.05;margin-bottom:1.2rem;color:var(--text);}
+.contact-title em{font-style:italic;color:var(--accent);font-weight:300;}
+.contact-sub{font-size:0.9rem;color:var(--text2);line-height:1.8;margin-bottom:2rem;}
+.contact-links{display:flex;flex-direction:column;gap:0.8rem;}
+.contact-link{display:flex;align-items:center;justify-content:space-between;padding:1.2rem 1.5rem;background:var(--bg);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text);font-size:0.85rem;transition:all 0.2s;}
+.contact-link:hover{border-color:var(--accent-line);background:var(--surface2);}
+.contact-link-left{display:flex;align-items:center;gap:0.8rem;}
+.contact-link-icon{width:36px;height:36px;background:var(--surface2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;font-weight:700;color:var(--text);}
+.contact-link-label{font-size:0.7rem;color:var(--muted);display:block;}
+.contact-link-value{font-weight:400;color:var(--text);font-size:0.83rem;}
+.contact-arrow{color:var(--muted);font-size:0.85rem;transition:transform 0.2s;}
+.contact-link:hover .contact-arrow{transform:translateX(3px);color:var(--accent);}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2.5rem 4rem;display:grid;grid-template-columns:1fr auto auto auto;gap:4rem;align-items:start;}
+.footer-brand{display:flex;flex-direction:column;gap:0.5rem;}
+.footer-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.95rem;color:var(--text);}
+.footer-logo span{color:var(--accent);}
+.footer-tagline{font-size:0.75rem;color:var(--muted);}
+.footer-col h4{font-family:'Bricolage Grotesque',sans-serif;font-size:0.72rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.8rem;}
+.footer-col a{display:block;font-size:0.78rem;color:var(--text2);text-decoration:none;margin-bottom:0.4rem;transition:color 0.2s;}
+.footer-col a:hover{color:var(--accent);}
+.footer-bottom{border-top:1px solid var(--border);padding:1.2rem 4rem;display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.reveal{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/* MOBILE */
+@media(max-width:900px){
+  nav{padding:1rem 1.5rem;}.nav-links{display:none;}
+  #hero{grid-template-columns:1fr;padding:8rem 1.5rem 4rem;}.hero-right{display:none;}
+  .section{padding:4rem 1.5rem;}.section-full{padding:4rem 1.5rem;}
+  .numbers-strip{grid-template-columns:repeat(2,1fr);}.number-item{border-bottom:1px solid var(--border);}
+  .project-row{grid-template-columns:1fr;}.proj-left,.proj-mid{border-right:none;border-bottom:1px solid var(--border);}
+  .exp-row{grid-template-columns:1fr;}.exp-left{border-right:none;border-bottom:1px solid var(--border);}
+  .process-grid{grid-template-columns:1fr;}
+  .screenshots-grid{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;gap:3rem;padding:4rem 1.5rem;}
+  footer{grid-template-columns:1fr;gap:2rem;padding:2rem 1.5rem;}
+  .footer-bottom{padding:1rem 1.5rem;flex-direction:column;gap:0.3rem;}
+  .lightbox-nav{display:none;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#hero" class="nav-logo">Ikrame <span>Atir</span></a>
+  <ul class="nav-links">
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#captures">Aperçu</a></li>
+    <li><a href="#experience">Parcours</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#process">Méthode</a></li>
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="blog/index.html">Blog</a></li>
+    <li><a href="#booking" class="nav-cta">Réserver un appel</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-line"></div><div class="hero-bg-line-2"></div><div class="hero-bg-line-3"></div>
+
+  <div class="hero-left">
+    <div class="hero-eyebrow"><div class="hero-dot"></div>Disponible immédiatement · Ingénieure IA Freelance</div>
+    <h1 class="hero-title">Je transforme vos<span class="hero-title-dim">processus répétitifs</span>en automatiques.</h1>
+    <div class="hero-typing-line">
+      <span class="hero-arrow">→</span>
+      <span class="hero-typed" id="typed-text"></span><span class="hero-cursor"></span>
+    </div>
+    <p class="hero-sub"><strong>Sans changer vos outils. Sans recruter. Sans délai interminable.</strong><br>J'identifie ce qui vous prend du temps — et je le fais tourner tout seul.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Parler de mon projet</a>
+      <a href="#projets" class="btn-ghost">Voir les réalisations</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="hero-photo-frame">
+      <img src="ikr.jpg" alt="Ikrame Atir">
+    </div>
+    <div class="hero-photo-caption">
+      <div class="hero-photo-name">Ikrame Atir</div>
+      <div class="hero-photo-role">Ingénieure IA · Freelance</div>
+    </div>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers-strip reveal">
+  <div class="number-item"><span class="number-val">–83%</span><span class="number-label">de temps de traitement documentaire</span></div>
+  <div class="number-item"><span class="number-val">200+</span><span class="number-label">documents traités automatiquement chaque semaine</span></div>
+  <div class="number-item"><span class="number-val">96.3%</span><span class="number-label">de précision sur la détection en temps réel</span></div>
+  <div class="number-item"><span class="number-val">5+</span><span class="number-label">solutions déployées en production</span></div>
+</div>
+
+<!-- PROJETS -->
+<div id="projets" style="border-top:1px solid var(--border);">
+<div class="section">
+  <div class="section-eyebrow reveal">Réalisations</div>
+  <h2 class="section-title reveal">Des processus transformés,<br>des résultats mesurables.</h2>
+  <p class="section-desc reveal">Chaque projet part d'un problème concret. Voilà ce qui a changé.</p>
+
+  <div class="proj-filters reveal">
+    <button class="proj-filter active" data-filter="all">Tous</button>
+    <button class="proj-filter" data-filter="industrie">Industrie</button>
+    <button class="proj-filter" data-filter="rh">Ressources humaines</button>
+    <button class="proj-filter" data-filter="sante">Santé</button>
+    <button class="proj-filter" data-filter="ecommerce">E-commerce</button>
+  </div>
+
+  <div class="projects-list">
+
+    <div class="project-row reveal" data-category="industrie">
+      <div class="proj-left"><div><div class="proj-index">01</div><div class="proj-client">Liebherr France</div><div class="proj-title">Extraction automatique de données équipements industriels</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">Industrie</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"Les ingénieurs passaient plusieurs jours à extraire manuellement les données depuis des centaines de pages de brochures PDF de machines industrielles."</p><p class="proj-desc">Solution IA qui lit les brochures de machines industrielles, identifie les équipements standard, optionnels et non disponibles dans des tableaux complexes, et met à jour automatiquement un fichier partagé avec validation humaine. Déployée en production sur Databricks.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span><span class="proj-tag" style="background:rgba(14,165,233,0.12);color:#7dd3fc;border-color:rgba(14,165,233,0.25);">Azure Document AI</span><span class="proj-tag" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">RAG</span><span class="proj-tag" style="background:rgba(255,75,43,0.12);color:#fca5a5;border-color:rgba(255,75,43,0.25);">Databricks</span><span class="proj-tag" style="background:rgba(6,182,212,0.12);color:#67e8f9;border-color:rgba(6,182,212,0.25);">MLflow</span><span class="proj-tag" style="background:rgba(255,75,135,0.12);color:#f9a8d4;border-color:rgba(255,75,135,0.25);">Streamlit</span><span class="proj-tag" style="background:rgba(99,102,241,0.12);color:#c4b5fd;border-color:rgba(99,102,241,0.25);">sentence-transformers</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">Plusieurs jours</div><div class="proj-result-label">réduits à quelques minutes</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">Production</div><div class="proj-result-label">solution utilisée quotidiennement</div></div></div>
+    </div>
+
+    <div class="project-row reveal" data-category="industrie">
+      <div class="proj-left"><div><div class="proj-index">02</div><div class="proj-client">K-LINE · Groupe LIEBOT</div><div class="proj-title">Assistant IA sur toute la documentation interne</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">Industrie</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"Les équipes perdaient des heures à chercher des informations éparpillées dans des PDFs, fichiers Excel, plans techniques et emails."</p><p class="proj-desc">Système RAG permettant à tous les employés d'interroger la documentation de l'entreprise en langage naturel. Réponses générées uniquement depuis les vrais documents internes, affichées en temps réel par streaming.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangChain</span><span class="proj-tag" style="background:rgba(245,158,11,0.12);color:#fcd34d;border-color:rgba(245,158,11,0.25);">FAISS</span><span class="proj-tag" style="background:rgba(139,92,246,0.12);color:#c4b5fd;border-color:rgba(139,92,246,0.25);">vLLM</span><span class="proj-tag" style="background:rgba(118,185,0,0.12);color:#bef264;border-color:rgba(118,185,0,0.25);">NVIDIA Nemotron</span><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span><span class="proj-tag" style="background:rgba(247,223,30,0.12);color:#fde68a;border-color:rgba(247,223,30,0.25);">JavaScript</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">Instantané</div><div class="proj-result-label">accès à toute la documentation en langage naturel</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">Streaming</div><div class="proj-result-label">réponses temps réel, zéro attente</div></div></div>
+    </div>
+
+    <div class="project-row reveal" data-category="industrie">
+      <div class="proj-left"><div><div class="proj-index">03</div><div class="proj-client">Mission freelance</div><div class="proj-title">Pipeline de traitement documentaire automatisé</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">Multi-secteur</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"200 documents arrivaient chaque semaine. Chaque document était lu, extrait et saisi manuellement dans un tableau — des heures de travail répétitif."</p><p class="proj-desc">Pipeline end-to-end : dès qu'un document arrive, il est lu, analysé par un LLM, les données structurées sont extraites et insérées automatiquement. Une alerte est envoyée uniquement si la confiance est faible.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(234,75,113,0.12);color:#fda4af;border-color:rgba(234,75,113,0.25);">n8n</span><span class="proj-tag" style="background:rgba(16,163,127,0.12);color:#6ee7b7;border-color:rgba(16,163,127,0.25);">GPT-4</span><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span><span class="proj-tag" style="background:rgba(45,127,249,0.12);color:#93c5fd;border-color:rgba(45,127,249,0.25);">Airtable</span><span class="proj-tag" style="background:rgba(74,21,75,0.25);color:#e9d5ff;border-color:rgba(74,21,75,0.5);">Slack</span><span class="proj-tag" style="background:rgba(26,130,226,0.12);color:#93c5fd;border-color:rgba(26,130,226,0.25);">SendGrid</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">–83%</div><div class="proj-result-label">de temps de traitement</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">95%+</div><div class="proj-result-label">des documents sans intervention humaine</div></div></div>
+    </div>
+
+    <div class="project-row reveal" data-category="rh">
+      <div class="proj-left"><div><div class="proj-index">04</div><div class="proj-client">CapitaleTech</div><div class="proj-title">Analyse automatique de CVs pour les équipes RH</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">Ressources humaines</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"Les recruteurs passaient des heures sur des CVs aux formats hétérogènes pour extraire les informations clés — texte libre, barres colorées, étoiles, pictogrammes."</p><p class="proj-desc">Modèle IA fine-tuné sur 9 000 CVs annotés qui extrait et normalise automatiquement les informations candidats quel que soit leur format. Score standardisé et classement automatique du meilleur au moins bon candidat.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">HuggingFace</span><span class="proj-tag" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">PaliGemma</span><span class="proj-tag" style="background:rgba(244,63,94,0.12);color:#fda4af;border-color:rgba(244,63,94,0.25);">LayoutLMv3</span><span class="proj-tag" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangSmith</span><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">9 000</div><div class="proj-result-label">CVs annotés pour l'entraînement</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">Universel</div><div class="proj-result-label">fonctionne sur tous les formats de CV</div></div></div>
+    </div>
+
+    <div class="project-row reveal" data-category="sante">
+      <div class="proj-left"><div><div class="proj-index">05</div><div class="proj-client">Secteur Santé</div><div class="proj-title">Triage automatique des emails patients</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">Santé</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"Les secrétaires médicales passaient des heures à lire, classer et rediriger manuellement des dizaines d'emails patients chaque jour."</p><p class="proj-desc">Système IA qui lit chaque email entrant, détecte son degré d'urgence et sa nature (administratif, médical, rappel), le redirige automatiquement vers le bon interlocuteur et envoie une confirmation au patient.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span><span class="proj-tag" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangChain</span><span class="proj-tag" style="background:rgba(16,163,127,0.12);color:#6ee7b7;border-color:rgba(16,163,127,0.25);">GPT-4</span><span class="proj-tag" style="background:rgba(234,75,113,0.12);color:#fda4af;border-color:rgba(234,75,113,0.25);">n8n</span><span class="proj-tag" style="background:rgba(232,121,249,0.12);color:#f0abfc;border-color:rgba(232,121,249,0.25);">API REST</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">–87%</div><div class="proj-result-label">de temps de traitement administratif</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">94%</div><div class="proj-result-label">des emails redirigés automatiquement</div></div></div>
+    </div>
+
+    <div class="project-row reveal" data-category="ecommerce">
+      <div class="proj-left"><div><div class="proj-index">06</div><div class="proj-client">E-commerçant</div><div class="proj-title">Traitement automatique des retours et analyse des avis clients</div></div><div style="margin-top:1.5rem;"><span class="proj-sector">E-commerce</span></div></div>
+      <div class="proj-mid"><p class="proj-problem">"Des dizaines de demandes de retour et d'avis arrivaient chaque jour. Chaque message était lu, classifié et traité manuellement par l'équipe support."</p><p class="proj-desc">Système IA qui analyse chaque message entrant, détecte le motif, génère une réponse personnalisée et déclenche les actions appropriées. Les avis négatifs sont analysés pour extraire des tendances produit actionnables.</p><div class="proj-tags"><span class="proj-tag" style="background:rgba(234,75,113,0.12);color:#fda4af;border-color:rgba(234,75,113,0.25);">n8n</span><span class="proj-tag" style="background:rgba(16,163,127,0.12);color:#6ee7b7;border-color:rgba(16,163,127,0.25);">GPT-4</span><span class="proj-tag" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span><span class="proj-tag" style="background:rgba(150,191,72,0.12);color:#bef264;border-color:rgba(150,191,72,0.25);">Shopify API</span><span class="proj-tag" style="background:rgba(255,255,255,0.08);color:#e2e8f0;border-color:rgba(255,255,255,0.15);">Notion</span></div></div>
+      <div class="proj-right"><div><div class="proj-result">–82%</div><div class="proj-result-label">de temps de traitement support</div></div><div style="margin-top:1.5rem;"><div class="proj-result" style="font-size:1.1rem;">24/7</div><div class="proj-result-label">traitement automatique sans interruption</div></div></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- CAPTURES -->
+<div id="captures" style="border-top:1px solid var(--border);">
+<div class="section">
+  <div class="section-eyebrow reveal">Aperçu</div>
+  <h2 class="section-title reveal">Les solutions en action</h2>
+  <p class="section-desc reveal">Cliquez sur une image pour l'agrandir.</p>
+  <div class="screenshots-grid reveal">
+
+    <div class="screenshot-card" data-index="0" data-title="Liebherr — Extraction PDF industrielle">
+      <img src="brochure.png" alt="Liebherr — Extraction PDF">
+      <div class="sc-overlay"><div class="sc-overlay-title">Liebherr — Extraction PDF</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+    <div class="screenshot-card" data-index="1" data-title="K-LINE — Assistant RAG documentaire">
+      <img src="kline.png" alt="K-LINE — Assistant RAG">
+      <div class="sc-overlay"><div class="sc-overlay-title">K-LINE — Assistant RAG</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+    <div class="screenshot-card" data-index="2" data-title="Pipeline n8n — Traitement documentaire automatisé">
+      <img src="n8n.png" alt="Pipeline n8n">
+      <div class="sc-overlay"><div class="sc-overlay-title">Pipeline n8n</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+    <div class="screenshot-card" data-index="3" data-title="CapitaleTech — Analyse et classement de CVs">
+      <img src="capitaletec.png" alt="CapitaleTech — Analyse CVs">
+      <div class="sc-overlay"><div class="sc-overlay-title">CapitaleTech — Analyse CVs</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+    <div class="screenshot-card" data-index="4" data-title="Santé — Triage automatique des emails patients">
+      <img src="sante.png" alt="Santé — Triage emails">
+      <div class="sc-overlay"><div class="sc-overlay-title">Santé — Triage emails</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+    <div class="screenshot-card" data-index="5" data-title="E-commerce — Analyse des avis et retours clients">
+      <img src="ecommerce.png" alt="E-commerce — Avis clients">
+      <div class="sc-overlay"><div class="sc-overlay-title">E-commerce — Avis clients</div><div class="sc-overlay-btn">Voir en grand</div></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-inner"><img id="lightbox-img" src="" alt=""><div class="lightbox-caption" id="lightbox-caption"></div></div>
+  <div class="lightbox-close" id="lightbox-close">✕</div>
+  <div class="lightbox-nav lightbox-prev" id="lightbox-prev">‹</div>
+  <div class="lightbox-nav lightbox-next" id="lightbox-next">›</div>
+</div>
+
+<!-- EXPERIENCE -->
+<div id="experience" style="border-top:1px solid var(--border);">
+<div class="section">
+  <div class="section-eyebrow reveal">Parcours</div>
+  <h2 class="section-title reveal">Expériences professionnelles</h2>
+
+  <div class="exp-list reveal">
+
+    <div class="exp-row">
+      <div class="exp-left">
+        <div class="exp-date">Sept. 2025 · Présent</div>
+        <div class="exp-company">Liebherr France</div>
+        <div class="exp-location">Colmar · Alternance</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">AI & Data Engineer</div>
+        <p class="exp-desc">Développement d'une solution IA end-to-end pour automatiser l'extraction de données depuis des brochures PDF de machines industrielles. Pipeline RAG avec détection de doublons sémantiques, déploiement Databricks Apps, suivi MLflow.</p>
+        <div class="exp-tags"><span class="exp-tag">Python</span><span class="exp-tag">Azure Document AI</span><span class="exp-tag">Databricks</span><span class="exp-tag">MLflow</span><span class="exp-tag">RAG</span><span class="exp-tag">Streamlit</span></div>
+      </div>
+    </div>
+
+    <div class="exp-row">
+      <div class="exp-left">
+        <div class="exp-date">Oct. 2024 · Fév. 2025</div>
+        <div class="exp-company">K-LINE · Groupe LIEBOT</div>
+        <div class="exp-location">France · Stage</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">AI Engineer</div>
+        <p class="exp-desc">Assistant IA interne RAG sur toute la documentation de l'entreprise. Pipeline chunking → FAISS → NVIDIA Nemotron. Intégration vLLM pour streaming temps réel. Interface HTML/CSS/JS.</p>
+        <div class="exp-tags"><span class="exp-tag">LangChain</span><span class="exp-tag">FAISS</span><span class="exp-tag">vLLM</span><span class="exp-tag">NVIDIA Nemotron</span><span class="exp-tag">Python</span><span class="exp-tag">JavaScript</span></div>
+      </div>
+    </div>
+
+    <div class="exp-row">
+      <div class="exp-left">
+        <div class="exp-date">Mai 2024 · Août 2024</div>
+        <div class="exp-company">CapitaleTech</div>
+        <div class="exp-location">France · Stage</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">AI Engineer</div>
+        <p class="exp-desc">Fine-tuning PaliGemma et LayoutLMv3 sur 9 000 CVs annotés. Plateforme d'évaluation multi-modèles avec calcul automatique ROUGE, BLEU, F1. Prompt engineering avancé avec LangSmith.</p>
+        <div class="exp-tags"><span class="exp-tag">HuggingFace</span><span class="exp-tag">PaliGemma</span><span class="exp-tag">LayoutLMv3</span><span class="exp-tag">LangSmith</span><span class="exp-tag">Python</span></div>
+      </div>
+    </div>
+
+    <div class="exp-row">
+      <div class="exp-left">
+        <div class="exp-date">Juil. 2023 · Sept. 2023</div>
+        <div class="exp-company">Nestlé</div>
+        <div class="exp-location">France · Stage</div>
+      </div>
+      <div class="exp-right">
+        <div class="exp-role">Data Analyst</div>
+        <p class="exp-desc">Application PowerApps de gestion du parc IT par scan de codes-barres, suivi en temps réel et alertes automatiques de maintenance.</p>
+        <div class="exp-tags"><span class="exp-tag">PowerApps</span><span class="exp-tag">SQL</span><span class="exp-tag">Power Platform</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- STACK -->
+<div id="stack" style="border-top:1px solid var(--border);background:var(--surface);overflow:hidden;">
+<div class="section" style="padding-bottom:4rem;">
+  <div class="section-eyebrow reveal">Compétences</div>
+  <h2 class="section-title reveal">Stack technique</h2>
+  <p class="section-desc reveal">Les outils et technologies que j'utilise pour construire vos solutions.</p>
+</div>
+<div class="stack-marquee reveal">
+  <div class="stack-track">
+    <span class="stack-pill" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangChain</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangGraph</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangSmith</span>
+    <span class="stack-pill" style="background:rgba(16,163,127,0.12);color:#6ee7b7;border-color:rgba(16,163,127,0.25);">GPT-4</span>
+    <span class="stack-pill" style="background:rgba(245,158,11,0.12);color:#fcd34d;border-color:rgba(245,158,11,0.25);">FAISS</span>
+    <span class="stack-pill" style="background:rgba(139,92,246,0.12);color:#c4b5fd;border-color:rgba(139,92,246,0.25);">vLLM</span>
+    <span class="stack-pill" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">HuggingFace</span>
+    <span class="stack-pill" style="background:rgba(255,75,43,0.12);color:#fca5a5;border-color:rgba(255,75,43,0.25);">Databricks</span>
+    <span class="stack-pill" style="background:rgba(6,182,212,0.12);color:#67e8f9;border-color:rgba(6,182,212,0.25);">MLflow</span>
+    <span class="stack-pill" style="background:rgba(255,75,135,0.12);color:#f9a8d4;border-color:rgba(255,75,135,0.25);">Streamlit</span>
+    <span class="stack-pill" style="background:rgba(252,114,255,0.12);color:#f0abfc;border-color:rgba(252,114,255,0.25);">Gradio</span>
+    <span class="stack-pill" style="background:rgba(234,75,113,0.12);color:#fda4af;border-color:rgba(234,75,113,0.25);">n8n</span>
+    <span class="stack-pill" style="background:rgba(45,127,249,0.12);color:#93c5fd;border-color:rgba(45,127,249,0.25);">Airtable</span>
+    <span class="stack-pill" style="background:rgba(99,102,241,0.12);color:#c4b5fd;border-color:rgba(99,102,241,0.25);">sentence-transformers</span>
+    <span class="stack-pill" style="background:rgba(14,165,233,0.12);color:#7dd3fc;border-color:rgba(14,165,233,0.25);">Azure Document AI</span>
+    <span class="stack-pill" style="background:rgba(244,63,94,0.12);color:#fda4af;border-color:rgba(244,63,94,0.25);">LayoutLMv3</span>
+    <span class="stack-pill" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">PaliGemma</span>
+    <span class="stack-pill" style="background:rgba(96,165,250,0.12);color:#bfdbfe;border-color:rgba(96,165,250,0.25);">PostgreSQL</span>
+    <span class="stack-pill" style="background:rgba(247,223,30,0.12);color:#fde68a;border-color:rgba(247,223,30,0.25);">JavaScript</span>
+    <!-- duplicate for seamless loop -->
+    <span class="stack-pill" style="background:rgba(59,130,246,0.12);color:#93c5fd;border-color:rgba(59,130,246,0.25);">Python</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangChain</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangGraph</span>
+    <span class="stack-pill" style="background:rgba(16,185,129,0.12);color:#6ee7b7;border-color:rgba(16,185,129,0.25);">LangSmith</span>
+    <span class="stack-pill" style="background:rgba(16,163,127,0.12);color:#6ee7b7;border-color:rgba(16,163,127,0.25);">GPT-4</span>
+    <span class="stack-pill" style="background:rgba(245,158,11,0.12);color:#fcd34d;border-color:rgba(245,158,11,0.25);">FAISS</span>
+    <span class="stack-pill" style="background:rgba(139,92,246,0.12);color:#c4b5fd;border-color:rgba(139,92,246,0.25);">vLLM</span>
+    <span class="stack-pill" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">HuggingFace</span>
+    <span class="stack-pill" style="background:rgba(255,75,43,0.12);color:#fca5a5;border-color:rgba(255,75,43,0.25);">Databricks</span>
+    <span class="stack-pill" style="background:rgba(6,182,212,0.12);color:#67e8f9;border-color:rgba(6,182,212,0.25);">MLflow</span>
+    <span class="stack-pill" style="background:rgba(255,75,135,0.12);color:#f9a8d4;border-color:rgba(255,75,135,0.25);">Streamlit</span>
+    <span class="stack-pill" style="background:rgba(252,114,255,0.12);color:#f0abfc;border-color:rgba(252,114,255,0.25);">Gradio</span>
+    <span class="stack-pill" style="background:rgba(234,75,113,0.12);color:#fda4af;border-color:rgba(234,75,113,0.25);">n8n</span>
+    <span class="stack-pill" style="background:rgba(45,127,249,0.12);color:#93c5fd;border-color:rgba(45,127,249,0.25);">Airtable</span>
+    <span class="stack-pill" style="background:rgba(99,102,241,0.12);color:#c4b5fd;border-color:rgba(99,102,241,0.25);">sentence-transformers</span>
+    <span class="stack-pill" style="background:rgba(14,165,233,0.12);color:#7dd3fc;border-color:rgba(14,165,233,0.25);">Azure Document AI</span>
+    <span class="stack-pill" style="background:rgba(244,63,94,0.12);color:#fda4af;border-color:rgba(244,63,94,0.25);">LayoutLMv3</span>
+    <span class="stack-pill" style="background:rgba(255,157,0,0.12);color:#fcd34d;border-color:rgba(255,157,0,0.25);">PaliGemma</span>
+    <span class="stack-pill" style="background:rgba(96,165,250,0.12);color:#bfdbfe;border-color:rgba(96,165,250,0.25);">PostgreSQL</span>
+    <span class="stack-pill" style="background:rgba(247,223,30,0.12);color:#fde68a;border-color:rgba(247,223,30,0.25);">JavaScript</span>
+  </div>
+</div>
+</div>
+
+<!-- PROCESS -->
+<div id="process">
+<div class="section-full" style="background:var(--surface);">
+<div style="max-width:1200px;margin:0 auto;padding:0 4rem;">
+  <div class="section-eyebrow reveal">Méthode</div>
+  <h2 class="section-title reveal">Comment je travaille</h2>
+  <p class="section-desc reveal">Pas de livrable sorti de nulle part. Chaque projet est construit avec vous, pas pour vous.</p>
+  <div class="process-grid reveal">
+    <div class="process-step"><div class="step-num">01</div><h3 class="step-title">Comprendre votre problème</h3><p class="step-desc">On commence par un call pour identifier précisément le processus à automatiser, ses étapes, ses acteurs et ce qu'il vous coûte aujourd'hui en temps. Je pose les questions que vous n'avez peut-être pas encore pensé à poser.</p></div>
+    <div class="process-step"><div class="step-num">02</div><h3 class="step-title">Construire avec vous</h3><p class="step-desc">Je développe la solution par itérations, avec des points réguliers pour vous montrer l'avancement et recueillir vos retours. Rien n'est figé — si quelque chose ne correspond pas, on ajuste immédiatement.</p></div>
+    <div class="process-step"><div class="step-num">03</div><h3 class="step-title">Déployer et accompagner</h3><p class="step-desc">Je déploie la solution dans votre environnement et j'accompagne vos équipes pour en faciliter l'adoption. Je m'assure que chaque collaborateur comprend comment l'utiliser au quotidien.</p></div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ABOUT -->
+<div id="apropos" style="border-top:1px solid var(--border);">
+<div class="section">
+  <div class="section-eyebrow reveal">À propos</div>
+  <div class="about-grid reveal">
+    <div>
+      <h2 class="about-title">Du terrain à l'IA en production.</h2>
+      <div class="about-text">
+        <p>Ingénieure passionnée par les nouvelles technologies, je construis des solutions pour les entreprises et les particuliers qui veulent remplacer leurs processus chronophages par de l'automatisation intelligente.</p>
+        <p>Deux ans de prépa, une école d'ingénieur, et aujourd'hui des solutions IA déployées en production — pas seulement en démo. Une solution n'a de valeur que si elle tourne réellement au quotidien.</p>
+        <p>Ce qui me différencie : avant de coder, je prends le temps de comprendre le vrai besoin. C'est ce qui garantit que la solution livrée résout le bon problème, pas juste un problème.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- BOOKING -->
+<div id="booking" style="border-top:1px solid var(--border);">
+<div class="section">
+  <div class="section-eyebrow reveal">Premier échange</div>
+  <h2 class="section-title reveal">Réservez un appel de 30 minutes</h2>
+  <p class="section-desc reveal">Choisissez directement un créneau qui vous convient — sans allers-retours par email.</p>
+  <div class="calendly-inline-widget reveal" data-url="https://calendly.com/ikraame-atir/30min" style="min-width:320px;height:700px;border-radius:12px;overflow:hidden;border:1px solid var(--border);"></div>
+</div>
+</div>
+<script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
+
+<!-- CONTACT -->
+<div id="contact">
+  <div class="contact-inner">
+    <div>
+      <h2 class="contact-title reveal">Un processus<br>qui vous <em>coûte</em><br>du temps ?</h2>
+      <p class="contact-sub reveal">Décrivez-le moi. On regarde ensemble si et comment l'automatiser.<br>Première consultation offerte — 30 minutes, sans engagement.</p>
+      <a href="mailto:ikraame.atir@gmail.com" class="btn-primary reveal">Prendre contact</a>
+    </div>
+    <div class="contact-links reveal">
+      <a href="https://calendly.com/ikraame-atir" target="_blank" class="contact-link"><div class="contact-link-left"><div class="contact-link-icon">📅</div><div><span class="contact-link-label">Réserver un créneau</span><span class="contact-link-value">Appel de découverte (30 min)</span></div></div><span class="contact-arrow">→</span></a>
+      <a href="mailto:ikraame.atir@gmail.com" class="contact-link"><div class="contact-link-left"><div class="contact-link-icon">✉</div><div><span class="contact-link-label">Email</span><span class="contact-link-value">ikraame.atir@gmail.com</span></div></div><span class="contact-arrow">→</span></a>
+      <a href="tel:+33650077191" class="contact-link"><div class="contact-link-left"><div class="contact-link-icon">📞</div><div><span class="contact-link-label">Téléphone</span><span class="contact-link-value">+33 6 50 07 71 91</span></div></div><span class="contact-arrow">→</span></a>
+      <a href="https://www.malt.fr/profile/ikrameatir?origin=dashboard_profile_name" target="_blank" class="contact-link"><div class="contact-link-left"><div class="contact-link-icon" style="font-size:0.75rem;font-weight:800;color:var(--accent);">M</div><div><span class="contact-link-label">Plateforme freelance</span><span class="contact-link-value">Profil Malt</span></div></div><span class="contact-arrow">→</span></a>
+      <a href="https://www.linkedin.com/in/ikrame-atir-5794aa264/?skipRedirect=true" target="_blank" class="contact-link"><div class="contact-link-left"><div class="contact-link-icon" style="font-size:0.75rem;font-weight:800;color:#0ea5e9;">in</div><div><span class="contact-link-label">Réseau professionnel</span><span class="contact-link-value">LinkedIn</span></div></div><span class="contact-arrow">→</span></a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">Ikrame <span>Atir</span></div>
+    <div class="footer-tagline">Ingénieure IA · Automatisation · Freelance</div>
+  </div>
+  <div class="footer-col">
+    <h4>Navigation</h4>
+    <a href="#projets">Projets</a>
+    <a href="#captures">Aperçu</a>
+    <a href="#experience">Parcours</a>
+    <a href="#process">Méthode</a>
+    <a href="#apropos">À propos</a>
+    <a href="blog/index.html">Blog</a>
+  </div>
+  <div class="footer-col">
+    <h4>Contact</h4>
+    <a href="mailto:ikraame.atir@gmail.com">Email</a>
+    <a href="https://www.malt.fr/profile/ikrameatir?origin=dashboard_profile_name" target="_blank">Malt</a>
+    <a href="https://www.linkedin.com/in/ikrame-atir-5794aa264/?skipRedirect=true" target="_blank">LinkedIn</a>
+  </div>
+  <div class="footer-col">
+    <h4>Localisation</h4>
+    <a href="#">Mulhouse, France</a>
+    <a href="#">Disponible à distance</a>
+  </div>
+</footer>
+<div class="footer-bottom">
+  <span>© 2025 Ikrame Atir — Tous droits réservés</span>
+  <span>Automatisation IA · Freelance</span>
+</div>
+
+<script>
+// Scroll reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if(entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Typing animation
+const words = ['RAG', 'Agents IA', 'n8n', 'LLMs', 'Automatisation'];
+let wi = 0, ci = 0, deleting = false;
+const el = document.getElementById('typed-text');
+function type() {
+  const word = words[wi];
+  if (!deleting) {
+    el.textContent = word.slice(0, ++ci);
+    if (ci === word.length) { deleting = true; setTimeout(type, 1800); return; }
+  } else {
+    el.textContent = word.slice(0, --ci);
+    if (ci === 0) { deleting = false; wi = (wi + 1) % words.length; }
+  }
+  setTimeout(type, deleting ? 60 : 100);
+}
+type();
+
+// Project filters
+const filters = document.querySelectorAll('.proj-filter');
+const rows = document.querySelectorAll('.project-row');
+filters.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filters.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    rows.forEach(row => {
+      if (f === 'all' || row.dataset.category === f) {
+        row.classList.remove('hidden');
+      } else {
+        row.classList.add('hidden');
+      }
+    });
+  });
+});
+
+// Lightbox
+const cards = document.querySelectorAll('.screenshot-card');
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lightbox-img');
+const lbCaption = document.getElementById('lightbox-caption');
+let currentIndex = 0;
+const cardData = Array.from(cards).map(card => ({
+  title: card.dataset.title,
+  src: card.querySelector('img') ? card.querySelector('img').src : ''
+}));
+function openLightbox(index) {
+  currentIndex = index;
+  lbImg.src = cardData[index].src;
+  lbCaption.textContent = cardData[index].title;
+  lightbox.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox() { lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+function navigate(dir) {
+  currentIndex = (currentIndex + dir + cardData.length) % cardData.length;
+  lbImg.src = cardData[currentIndex].src;
+  lbCaption.textContent = cardData[currentIndex].title;
+}
+cards.forEach((card, i) => { card.addEventListener('click', () => openLightbox(i)); });
+document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+document.getElementById('lightbox-prev').addEventListener('click', () => navigate(-1));
+document.getElementById('lightbox-next').addEventListener('click', () => navigate(1));
+lightbox.addEventListener('click', e => { if(e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', e => {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'Escape') closeLightbox();
+  if(e.key === 'ArrowLeft') navigate(-1);
+  if(e.key === 'ArrowRight') navigate(1);
+});
+</script>
+</body>
+</html>

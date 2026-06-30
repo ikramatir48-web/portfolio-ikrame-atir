@@ -1,0 +1,278 @@
+<!--
+  ═══════════════════════════════════════════════════════════════
+  GABARIT D'ARTICLE — Comment l'utiliser
+  ═══════════════════════════════════════════════════════════════
+  1. Dupliquez ce fichier, renommez-le avec le slug de l'article
+     (ex: mon-nouvel-article.html) — pas d'espaces ni d'accents.
+  2. Remplacez tous les textes entre crochets [comme ceci].
+  3. Supprimez les blocs que vous n'utilisez pas (tableau, citation,
+     chiffres-clés) — ils sont indépendants les uns des autres.
+  4. Ajoutez une entrée correspondante dans articles.json pour que
+     l'article apparaisse sur la page liste (index.html).
+  5. La bio dans l'encart "À propos de l'auteure" est générique
+     et n'a pas besoin d'être modifiée à chaque article.
+  ═══════════════════════════════════════════════════════════════
+-->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[TITRE DE L'ARTICLE] — Ikrame Atir</title>
+<meta name="description" content="[RÉSUMÉ DE 1-2 PHRASES POUR GOOGLE — reprend l'idée du résumé affiché sur la page liste]">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230c0c0e'/%3E%3Ctext x='50' y='62' font-family='Arial,sans-serif' font-size='42' font-weight='800' fill='%23c8b8ff' text-anchor='middle'%3EIA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --surface: #131316;
+  --surface2: #1c1c22;
+  --border: #27272f;
+  --border2: #35353f;
+  --accent: #c8b8ff;
+  --accent-dim: rgba(200,184,255,0.1);
+  --accent-line: rgba(200,184,255,0.25);
+  --text: #f5f4ff;
+  --text2: #cccadc;
+  --muted: #7a788f;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 4rem;background:rgba(12,12,14,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:0.82rem;color:var(--text2);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{font-size:0.82rem;color:var(--bg)!important;background:var(--accent);padding:0.55rem 1.3rem;border-radius:6px;text-decoration:none;font-weight:500;}
+
+/* ARTICLE HEADER */
+.article-header{padding:10rem 2rem 3rem;max-width:680px;margin:0 auto;}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--muted);text-decoration:none;margin-bottom:2rem;transition:color 0.2s;}
+.back-link:hover{color:var(--accent);}
+.article-meta{display:flex;align-items:center;gap:0.8rem;font-size:0.78rem;color:var(--muted);margin-bottom:1.2rem;letter-spacing:0.02em;}
+.article-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);}
+.article-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-0.025em;line-height:1.15;margin-bottom:1.2rem;}
+.article-author{display:flex;align-items:center;gap:0.7rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.author-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-line);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.78rem;color:var(--accent);}
+.author-info{font-size:0.82rem;}
+.author-name{color:var(--text);font-weight:500;}
+.author-role{color:var(--muted);font-size:0.76rem;}
+
+/* ARTICLE BODY */
+.article-body{max-width:680px;margin:0 auto;padding:0 2rem 4rem;font-size:1.02rem;line-height:1.9;color:var(--text2);}
+.article-body h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.5rem;color:var(--text);letter-spacing:-0.015em;margin:2.8rem 0 1.1rem;line-height:1.3;}
+.article-body h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text);letter-spacing:-0.01em;margin:2.2rem 0 0.9rem;}
+.article-body p{margin-bottom:1.4rem;}
+.article-body strong{color:var(--text);font-weight:500;}
+.article-body em{font-style:italic;color:var(--text);}
+.article-body a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-line);text-underline-offset:3px;}
+.article-body ul,.article-body ol{margin:0 0 1.4rem 1.4rem;}
+.article-body li{margin-bottom:0.6rem;padding-left:0.3rem;}
+.article-body ul li::marker{color:var(--accent);}
+
+.article-body blockquote{margin:2rem 0;padding:1.2rem 1.6rem;border-left:3px solid var(--accent);background:var(--surface);border-radius:0 8px 8px 0;}
+.article-body blockquote p{margin-bottom:0;font-family:'Instrument Serif',serif;font-style:italic;font-size:1.15rem;color:var(--text);line-height:1.6;}
+
+.article-body table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:0.88rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.article-body th{background:var(--surface);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;font-weight:600;text-align:left;padding:0.8rem 1rem;border-bottom:1px solid var(--border);font-size:0.78rem;letter-spacing:0.02em;}
+.article-body td{padding:0.8rem 1rem;border-bottom:1px solid var(--border);color:var(--text2);}
+.article-body tr:last-child td{border-bottom:none;}
+
+.article-body code{background:var(--surface2);color:var(--accent);padding:0.15rem 0.4rem;border-radius:4px;font-size:0.85em;font-family:'DM Sans',monospace;}
+
+.pull-fact{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:2.2rem 0;}
+.pull-fact-item{flex:1;background:var(--surface);padding:1.3rem 1.5rem;}
+.pull-fact-num{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent);letter-spacing:-0.02em;display:block;margin-bottom:0.3rem;}
+.pull-fact-label{font-size:0.76rem;color:var(--muted);line-height:1.5;}
+
+/* SOURCES */
+.sources-section{max-width:680px;margin:0 auto;padding:2.5rem 2rem;border-top:1px solid var(--border);}
+.sources-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;}
+.sources-list{display:flex;flex-direction:column;gap:0.8rem;}
+.source-item{font-size:0.82rem;color:var(--text2);line-height:1.6;padding-left:1.2rem;position:relative;}
+.source-item::before{content:'';position:absolute;left:0;top:0.55em;width:5px;height:5px;border-radius:50%;background:var(--muted);}
+.source-item a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-line);text-underline-offset:2px;}
+
+/* AUTHOR BOX */
+.author-box{max-width:680px;margin:0 auto;padding:2.5rem 2rem;}
+.author-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;}
+.author-card-avatar{width:56px;height:56px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-line);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent);flex-shrink:0;}
+.author-card-content{flex:1;}
+.author-card-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
+.author-card-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:0.6rem;}
+.author-card-bio{font-size:0.85rem;color:var(--text2);line-height:1.75;margin-bottom:1rem;}
+.author-card-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--accent);text-decoration:none;font-weight:500;}
+.author-card-link:hover{text-decoration:underline;}
+
+/* SHARE */
+.share-section{max-width:680px;margin:0 auto;padding:0 2rem 4rem;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;}
+.share-label{font-size:0.78rem;color:var(--muted);margin-right:0.4rem;}
+.share-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.1rem;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);text-decoration:none;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.share-btn:hover{border-color:var(--accent-line);color:var(--text);background:var(--surface2);}
+.share-btn.copied{color:var(--accent);border-color:var(--accent-line);}
+
+footer{border-top:1px solid var(--border);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--muted);}
+footer a{color:var(--muted);text-decoration:none;}
+footer a:hover{color:var(--accent);}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  .article-header{padding:8rem 1.5rem 2.5rem;}
+  .article-body{padding:0 1.5rem 3rem;font-size:0.97rem;}
+  .sources-section,.author-box,.share-section{padding-left:1.5rem;padding-right:1.5rem;}
+  .pull-fact{flex-direction:column;}
+  footer{padding:1.5rem;flex-direction:column;gap:0.5rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ikrame <span>Atir</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#projets">Projets</a></li>
+    <li><a href="../index.html#captures">Aperçu</a></li>
+    <li><a href="../index.html#experience">Parcours</a></li>
+    <li><a href="../index.html#stack">Stack</a></li>
+    <li><a href="../index.html#process">Méthode</a></li>
+    <li><a href="../index.html#apropos">À propos</a></li>
+    <li><a href="index.html">Blog</a></li>
+    <li><a href="../index.html#booking" class="nav-cta">Réserver un appel</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a href="index.html" class="back-link">← Tous les articles</a>
+  <div class="article-meta">
+    <span>[DATE EX: 20 mars 2025]</span>
+    <span class="dot"></span>
+    <span>[X min] de lecture</span>
+  </div>
+  <h1 class="article-title">[TITRE DE L'ARTICLE]</h1>
+  <div class="article-author">
+    <div class="author-avatar">IA</div>
+    <div class="author-info">
+      <div class="author-name">Ikrame Atir</div>
+      <div class="author-role">Ingénieure IA · Freelance</div>
+    </div>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>[Paragraphe d'introduction. Une balise <code>&lt;p&gt;...&lt;/p&gt;</code> par paragraphe.]</p>
+
+  <h2>[Titre de section — balise h2]</h2>
+
+  <p>Texte normal. Pour mettre un mot en <strong>gras</strong>, utilisez <code>&lt;strong&gt;...&lt;/strong&gt;</code>. Pour de l'<em>italique</em>, utilisez <code>&lt;em&gt;...&lt;/em&gt;</code>.</p>
+
+  <h3>[Sous-titre — balise h3]</h3>
+
+  <p>Pour une liste à puces :</p>
+  <ul>
+    <li>Premier élément</li>
+    <li>Deuxième élément</li>
+    <li>Troisième élément</li>
+  </ul>
+
+  <p>Pour une liste numérotée, remplacez <code>&lt;ul&gt;</code> par <code>&lt;ol&gt;</code> — les puces deviendront automatiquement des numéros.</p>
+
+  <blockquote>
+    <p>[Citation mise en avant — utile pour une phrase forte ou une citation de source.]</p>
+  </blockquote>
+
+  <div class="pull-fact">
+    <div class="pull-fact-item">
+      <span class="pull-fact-num">[Chiffre]</span>
+      <span class="pull-fact-label">[Légende du chiffre]</span>
+    </div>
+    <div class="pull-fact-item">
+      <span class="pull-fact-num">[Chiffre]</span>
+      <span class="pull-fact-label">[Légende du chiffre]</span>
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>[Colonne 1]</th>
+        <th>[Colonne 2]</th>
+        <th>[Colonne 3]</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>[Donnée]</td>
+        <td>[Donnée]</td>
+        <td>[Donnée]</td>
+      </tr>
+      <tr>
+        <td>[Donnée]</td>
+        <td>[Donnée]</td>
+        <td>[Donnée]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>[Conclusion]</h2>
+
+  <p>[Paragraphe de conclusion.]</p>
+
+</article>
+
+<div class="sources-section">
+  <div class="sources-title">Sources</div>
+  <div class="sources-list">
+    <div class="source-item">[Nom de la source] — <a href="[URL]" target="_blank">[texte du lien]</a></div>
+    <div class="source-item">[Nom de la source] — <a href="[URL]" target="_blank">[texte du lien]</a></div>
+  </div>
+</div>
+
+<div class="author-box">
+  <div class="author-card">
+    <div class="author-card-avatar">IA</div>
+    <div class="author-card-content">
+      <div class="author-card-label">À propos de l'auteure</div>
+      <div class="author-card-name">Ikrame Atir</div>
+      <p class="author-card-bio">Ingénieure IA freelance, je construis des solutions d'automatisation — RAG, agents, pipelines documentaires — pour des entreprises et des particuliers qui veulent remplacer leurs processus chronophages. Avant de coder, je prends le temps de comprendre le vrai besoin.</p>
+      <a href="../index.html#contact" class="author-card-link">Parler de votre projet →</a>
+    </div>
+  </div>
+</div>
+
+<div class="share-section">
+  <span class="share-label">Partager :</span>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" class="share-btn" id="linkedin-share">LinkedIn</a>
+  <button class="share-btn" id="copy-link">Copier le lien</button>
+</div>
+
+<footer>
+  <span>© 2025 Ikrame Atir</span>
+  <a href="../index.html">Retour au portfolio</a>
+</footer>
+
+<script>
+// Set LinkedIn share URL dynamically to current page
+document.getElementById('linkedin-share').href =
+  'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href);
+
+// Copy link button
+document.getElementById('copy-link').addEventListener('click', function() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    this.textContent = 'Lien copié ✓';
+    this.classList.add('copied');
+    setTimeout(() => {
+      this.textContent = 'Copier le lien';
+      this.classList.remove('copied');
+    }, 2000);
+  });
+});
+</script>
+
+</body>
+</html>

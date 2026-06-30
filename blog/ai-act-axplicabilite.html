@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Act et explicabilité : ce que ça change concrètement pour les entreprises — Ikrame Atir</title>
+<meta name="description" content="Le règlement européen sur l'IA impose une exigence d'explicabilité pour les systèmes à risque. Décryptage de ce que ça implique vraiment pour les solutions IA déployées en entreprise.">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230c0c0e'/%3E%3Ctext x='50' y='62' font-family='Arial,sans-serif' font-size='42' font-weight='800' fill='%23c8b8ff' text-anchor='middle'%3EIA%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0e;
+  --surface: #131316;
+  --surface2: #1c1c22;
+  --border: #27272f;
+  --border2: #35353f;
+  --accent: #c8b8ff;
+  --accent-dim: rgba(200,184,255,0.1);
+  --accent-line: rgba(200,184,255,0.25);
+  --text: #f5f4ff;
+  --text2: #cccadc;
+  --muted: #7a788f;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:300;line-height:1.6;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;justify-content:space-between;align-items:center;padding:1.4rem 4rem;background:rgba(12,12,14,0.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1rem;color:var(--text);text-decoration:none;}
+.nav-logo span{color:var(--accent);}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:0.82rem;color:var(--text2);text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{font-size:0.82rem;color:var(--bg)!important;background:var(--accent);padding:0.55rem 1.3rem;border-radius:6px;text-decoration:none;font-weight:500;}
+
+/* ARTICLE HEADER */
+.article-header{padding:10rem 2rem 3rem;max-width:680px;margin:0 auto;}
+.back-link{display:inline-flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:var(--muted);text-decoration:none;margin-bottom:2rem;transition:color 0.2s;}
+.back-link:hover{color:var(--accent);}
+.article-meta{display:flex;align-items:center;gap:0.8rem;font-size:0.78rem;color:var(--muted);margin-bottom:1.2rem;letter-spacing:0.02em;}
+.article-meta .dot{width:3px;height:3px;border-radius:50%;background:var(--muted);}
+.article-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(1.8rem,4vw,2.6rem);letter-spacing:-0.025em;line-height:1.15;margin-bottom:1.2rem;}
+.article-author{display:flex;align-items:center;gap:0.7rem;padding-top:1.2rem;border-top:1px solid var(--border);}
+.author-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-line);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.78rem;color:var(--accent);}
+.author-info{font-size:0.82rem;}
+.author-name{color:var(--text);font-weight:500;}
+.author-role{color:var(--muted);font-size:0.76rem;}
+
+/* ARTICLE BODY */
+.article-body{max-width:680px;margin:0 auto;padding:0 2rem 4rem;font-size:1.02rem;line-height:1.9;color:var(--text2);}
+.article-body h2{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.5rem;color:var(--text);letter-spacing:-0.015em;margin:2.8rem 0 1.1rem;line-height:1.3;}
+.article-body h3{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.2rem;color:var(--text);letter-spacing:-0.01em;margin:2.2rem 0 0.9rem;}
+.article-body p{margin-bottom:1.4rem;}
+.article-body strong{color:var(--text);font-weight:500;}
+.article-body em{font-style:italic;color:var(--text);}
+.article-body a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-line);text-underline-offset:3px;}
+.article-body ul,.article-body ol{margin:0 0 1.4rem 1.4rem;}
+.article-body li{margin-bottom:0.6rem;padding-left:0.3rem;}
+.article-body ul li::marker{color:var(--accent);}
+
+.article-body blockquote{margin:2rem 0;padding:1.2rem 1.6rem;border-left:3px solid var(--accent);background:var(--surface);border-radius:0 8px 8px 0;}
+.article-body blockquote p{margin-bottom:0;font-family:'Instrument Serif',serif;font-style:italic;font-size:1.15rem;color:var(--text);line-height:1.6;}
+
+.article-body table{width:100%;border-collapse:collapse;margin:2rem 0;font-size:0.88rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.article-body th{background:var(--surface);color:var(--text);font-family:'Bricolage Grotesque',sans-serif;font-weight:600;text-align:left;padding:0.8rem 1rem;border-bottom:1px solid var(--border);font-size:0.78rem;letter-spacing:0.02em;}
+.article-body td{padding:0.8rem 1rem;border-bottom:1px solid var(--border);color:var(--text2);}
+.article-body tr:last-child td{border-bottom:none;}
+
+.article-body code{background:var(--surface2);color:var(--accent);padding:0.15rem 0.4rem;border-radius:4px;font-size:0.85em;font-family:'DM Sans',monospace;}
+
+.pull-fact{display:flex;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:2.2rem 0;}
+.pull-fact-item{flex:1;background:var(--surface);padding:1.3rem 1.5rem;}
+.pull-fact-num{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.5rem;color:var(--accent);letter-spacing:-0.02em;display:block;margin-bottom:0.3rem;}
+.pull-fact-label{font-size:0.76rem;color:var(--muted);line-height:1.5;}
+
+/* SOURCES */
+.sources-section{max-width:680px;margin:0 auto;padding:2.5rem 2rem;border-top:1px solid var(--border);}
+.sources-title{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem;}
+.sources-list{display:flex;flex-direction:column;gap:0.8rem;}
+.source-item{font-size:0.82rem;color:var(--text2);line-height:1.6;padding-left:1.2rem;position:relative;}
+.source-item::before{content:'';position:absolute;left:0;top:0.55em;width:5px;height:5px;border-radius:50%;background:var(--muted);}
+.source-item a{color:var(--accent);text-decoration:underline;text-decoration-color:var(--accent-line);text-underline-offset:2px;}
+
+/* AUTHOR BOX */
+.author-box{max-width:680px;margin:0 auto;padding:2.5rem 2rem;}
+.author-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;display:flex;gap:1.5rem;align-items:flex-start;}
+.author-card-avatar{width:56px;height:56px;border-radius:50%;background:var(--accent-dim);border:1px solid var(--accent-line);display:flex;align-items:center;justify-content:center;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.1rem;color:var(--accent);flex-shrink:0;}
+.author-card-content{flex:1;}
+.author-card-label{font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:0.5rem;}
+.author-card-name{font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:1.05rem;color:var(--text);margin-bottom:0.6rem;}
+.author-card-bio{font-size:0.85rem;color:var(--text2);line-height:1.75;margin-bottom:1rem;}
+.author-card-link{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.8rem;color:var(--accent);text-decoration:none;font-weight:500;}
+.author-card-link:hover{text-decoration:underline;}
+
+/* SHARE */
+.share-section{max-width:680px;margin:0 auto;padding:0 2rem 4rem;display:flex;align-items:center;gap:0.8rem;flex-wrap:wrap;}
+.share-label{font-size:0.78rem;color:var(--muted);margin-right:0.4rem;}
+.share-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.55rem 1.1rem;border-radius:7px;border:1px solid var(--border2);background:var(--surface);color:var(--text2);text-decoration:none;font-size:0.8rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+.share-btn:hover{border-color:var(--accent-line);color:var(--text);background:var(--surface2);}
+.share-btn.copied{color:var(--accent);border-color:var(--accent-line);}
+
+footer{border-top:1px solid var(--border);padding:2rem 4rem;display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--muted);}
+footer a{color:var(--muted);text-decoration:none;}
+footer a:hover{color:var(--accent);}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem;}
+  .nav-links{display:none;}
+  .article-header{padding:8rem 1.5rem 2.5rem;}
+  .article-body{padding:0 1.5rem 3rem;font-size:0.97rem;}
+  .sources-section,.author-box,.share-section{padding-left:1.5rem;padding-right:1.5rem;}
+  .pull-fact{flex-direction:column;}
+  footer{padding:1.5rem;flex-direction:column;gap:0.5rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-logo">Ikrame <span>Atir</span></a>
+  <ul class="nav-links">
+    <li><a href="../index.html#projets">Projets</a></li>
+    <li><a href="../index.html#captures">Aperçu</a></li>
+    <li><a href="../index.html#experience">Parcours</a></li>
+    <li><a href="../index.html#stack">Stack</a></li>
+    <li><a href="../index.html#process">Méthode</a></li>
+    <li><a href="../index.html#apropos">À propos</a></li>
+    <li><a href="index.html">Blog</a></li>
+    <li><a href="../index.html#booking" class="nav-cta">Réserver un appel</a></li>
+  </ul>
+</nav>
+
+<div class="article-header">
+  <a href="index.html" class="back-link">← Tous les articles</a>
+  <div class="article-meta">
+    <span>15 janvier 2025</span>
+    <span class="dot"></span>
+    <span>6 min de lecture</span>
+  </div>
+  <h1 class="article-title">AI Act et explicabilité : ce que ça change concrètement pour les entreprises</h1>
+  <div class="article-author">
+    <div class="author-avatar">IA</div>
+    <div class="author-info">
+      <div class="author-name">Ikrame Atir</div>
+      <div class="author-role">Ingénieure IA · Freelance</div>
+    </div>
+  </div>
+</div>
+
+<article class="article-body">
+
+  <p>Le règlement européen sur l'intelligence artificielle, entré en application par étapes depuis 2024, introduit une notion qui inquiète beaucoup d'entreprises sans qu'elles en comprennent toujours la portée réelle : l'explicabilité. Concrètement, qu'est-ce que ça veut dire pour une PME qui utilise un système IA pour scorer des candidatures, recommander des produits, ou automatiser une décision métier ?</p>
+
+  <h2>Ce que l'AI Act exige réellement</h2>
+
+  <p>L'AI Act classe les systèmes d'intelligence artificielle selon leur niveau de risque : inacceptable, élevé, limité, minimal. La grande majorité des outils d'automatisation utilisés en entreprise — assistants RAG, classification de documents, scoring simple — se situent en risque limité ou minimal. Mais certains usages spécifiques basculent en <strong>risque élevé</strong> : recrutement, crédit, évaluation scolaire, systèmes affectant l'accès à des services essentiels.</p>
+
+  <p>Pour ces systèmes à risque élevé, le règlement impose plusieurs obligations, dont celle qui nous intéresse ici : la capacité à expliquer, dans une certaine mesure, comment une décision a été prise.</p>
+
+  <blockquote>
+    <p>L'explicabilité n'exige pas de comprendre chaque calcul interne d'un modèle. Elle exige de pouvoir justifier une décision auprès d'une personne affectée par elle.</p>
+  </blockquote>
+
+  <h2>La confusion la plus fréquente</h2>
+
+  <p>Beaucoup d'entreprises pensent que l'explicabilité signifie devoir choisir des modèles "simples" (régression, arbres de décision) plutôt que des LLMs ou des réseaux complexes jugés trop opaques. C'est une simplification excessive.</p>
+
+  <p>Ce que le règlement attend réellement, c'est un <strong>niveau de traçabilité et de documentation</strong> suffisant pour répondre à trois questions, quel que soit le système utilisé :</p>
+
+  <ul>
+    <li>Sur quelles données le système a-t-il été entraîné ou s'appuie-t-il pour répondre ?</li>
+    <li>Quels facteurs ont concrètement influencé une décision donnée ?</li>
+    <li>Existe-t-il un moyen pour la personne concernée de contester ou demander une révision humaine ?</li>
+  </ul>
+
+  <p>Un système RAG bien construit, par exemple, peut être parfaitement conforme : il cite ses sources, on peut tracer exactement quel document a généré quelle réponse. C'est souvent plus explicable qu'un modèle de scoring "simple" mais opaque dans sa logique de pondération.</p>
+
+  <h2>Ce que ça implique concrètement pour une solution IA</h2>
+
+  <div class="pull-fact">
+    <div class="pull-fact-item">
+      <span class="pull-fact-num">4</span>
+      <span class="pull-fact-label">niveaux de risque définis par l'AI Act</span>
+    </div>
+    <div class="pull-fact-item">
+      <span class="pull-fact-num">2026</span>
+      <span class="pull-fact-label">échéance pour la pleine application des obligations sur les systèmes à risque élevé</span>
+    </div>
+  </div>
+
+  <p>Pour les entreprises avec qui je travaille, ça se traduit par des choix concrets dès la phase de conception :</p>
+
+  <h3>1. Documenter le pipeline, pas seulement le résultat</h3>
+  <p>Chaque étape — quelles données sont utilisées, comment elles sont filtrées, quel modèle traite quoi — doit être traçable. Ce n'est pas une contrainte qui ralentit le projet si elle est pensée dès le départ ; c'est un coût bien plus élevé si elle est ajoutée après coup.</p>
+
+  <h3>2. Privilégier les architectures qui citent leurs sources</h3>
+  <p>Un système RAG qui répond toujours en s'appuyant sur des documents identifiables est structurellement plus conforme qu'un système qui "sait" sans pouvoir dire d'où vient l'information.</p>
+
+  <h3>3. Prévoir un point de contrôle humain</h3>
+  <p>Pour les décisions à fort impact, le système ne doit pas être la décision finale, mais une aide à la décision avec une trace claire de ce qui a été recommandé et pourquoi.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Niveau de risque</th>
+        <th>Exemples</th>
+        <th>Obligation principale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Inacceptable</td>
+        <td>Notation sociale, manipulation comportementale</td>
+        <td>Interdiction</td>
+      </tr>
+      <tr>
+        <td>Élevé</td>
+        <td>Recrutement, crédit, éducation</td>
+        <td>Explicabilité, documentation, supervision humaine</td>
+      </tr>
+      <tr>
+        <td>Limité</td>
+        <td>Chatbots, assistants génériques</td>
+        <td>Transparence (informer l'utilisateur qu'il interagit avec une IA)</td>
+      </tr>
+      <tr>
+        <td>Minimal</td>
+        <td>Filtres anti-spam, recommandations simples</td>
+        <td>Aucune obligation spécifique</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Ce qu'il faut retenir</h2>
+
+  <p>L'explicabilité n'est pas un frein à l'innovation, c'est une exigence de conception. Les entreprises qui l'intègrent dès le départ — en choisissant des architectures traçables et en documentant leurs choix — n'auront rien à changer en profondeur le jour où la réglementation s'appliquera pleinement à leur usage. Celles qui l'ignorent risquent de devoir reconstruire des systèmes entiers dans l'urgence.</p>
+
+  <p>Ce n'est pas tant une question de conformité juridique que de <em>confiance</em> : un système qu'on ne peut pas expliquer à un client, un employé ou un régulateur, est un système qu'on ne maîtrise pas vraiment.</p>
+
+</article>
+
+<div class="sources-section">
+  <div class="sources-title">Sources</div>
+  <div class="sources-list">
+    <div class="source-item">Règlement (UE) 2024/1689 du Parlement européen et du Conseil établissant des règles harmonisées concernant l'intelligence artificielle (AI Act) — <a href="https://eur-lex.europa.eu" target="_blank">EUR-Lex, Journal officiel de l'Union européenne</a></div>
+    <div class="source-item">Commission européenne — Document d'orientation sur la classification des systèmes IA à haut risque, <a href="https://digital-strategy.ec.europa.eu" target="_blank">digital-strategy.ec.europa.eu</a></div>
+    <div class="source-item">Lignes directrices sur la transparence et l'explicabilité des systèmes d'IA, Comité européen de la protection des données</div>
+  </div>
+</div>
+
+<div class="author-box">
+  <div class="author-card">
+    <div class="author-card-avatar">IA</div>
+    <div class="author-card-content">
+      <div class="author-card-label">À propos de l'auteure</div>
+      <div class="author-card-name">Ikrame Atir</div>
+      <p class="author-card-bio">Ingénieure IA freelance, je construis des solutions d'automatisation — RAG, agents, pipelines documentaires — pour des entreprises et des particuliers qui veulent remplacer leurs processus chronophages. Avant de coder, je prends le temps de comprendre le vrai besoin.</p>
+      <a href="../index.html#contact" class="author-card-link">Parler de votre projet →</a>
+    </div>
+  </div>
+</div>
+
+<div class="share-section">
+  <span class="share-label">Partager :</span>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url=" target="_blank" class="share-btn" id="linkedin-share">LinkedIn</a>
+  <button class="share-btn" id="copy-link">Copier le lien</button>
+</div>
+
+<footer>
+  <span>© 2025 Ikrame Atir</span>
+  <a href="../index.html">Retour au portfolio</a>
+</footer>
+
+<script>
+// Set LinkedIn share URL dynamically to current page
+document.getElementById('linkedin-share').href =
+  'https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href);
+
+// Copy link button
+document.getElementById('copy-link').addEventListener('click', function() {
+  navigator.clipboard.writeText(window.location.href).then(() => {
+    this.textContent = 'Lien copié ✓';
+    this.classList.add('copied');
+    setTimeout(() => {
+      this.textContent = 'Copier le lien';
+      this.classList.remove('copied');
+    }, 2000);
+  });
+});
+</script>
+
+</body>
+</html>
